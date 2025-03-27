@@ -1,0 +1,40 @@
+# depslib dependency file v1.0
+1742817349 source:c:\users\this pc\desktop\project\minesweeperupdated\main.cpp
+	"defs.h"
+	"graphics.h"
+	"functions.h"
+	"texture.h"
+
+1742803329 c:\users\this pc\desktop\project\minesweeperupdated\defs.h
+
+1742803588 c:\users\this pc\desktop\project\minesweeperupdated\graphics.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+
+1742803329 c:\users\this pc\desktop\project\minesweeperupdated\functions.h
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	"graphics.h"
+
+1742817349 source:c:\users\this pc\desktop\project\minesweeperupdated\functions.cpp
+	<fstream>
+	<stdlib.h>
+	<cstdlib>
+	"functions.h"
+	"texture.h"
+
+1742489269 c:\users\this pc\desktop\project\minesweeperupdated\button.h
+	<SDL.h>
+	<SDL_image.h>
+	<string>
+	"graphics.h"
+	"functions.h"
+
+1742817349 c:\users\this pc\desktop\project\minesweeperupdated\texture.h
+
+1742817059 source:c:\users\this pc\desktop\project\minesweeperupdated\graphics.cpp
+	"graphics.h"
+	"defs.h"
+
