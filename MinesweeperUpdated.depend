@@ -1,24 +1,26 @@
 # depslib dependency file v1.0
-1742817349 source:c:\users\this pc\desktop\project\minesweeperupdated\main.cpp
+1743260346 source:c:\users\this pc\desktop\project\minesweeperupdated\main.cpp
 	"defs.h"
 	"graphics.h"
 	"functions.h"
-	"texture.h"
 
-1742803329 c:\users\this pc\desktop\project\minesweeperupdated\defs.h
+1743254662 c:\users\this pc\desktop\project\minesweeperupdated\defs.h
 
-1742803588 c:\users\this pc\desktop\project\minesweeperupdated\graphics.h
+1743259092 c:\users\this pc\desktop\project\minesweeperupdated\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
+	<SDL_mixer.h>
+	<vector>
+	"defs.h"
 
-1742803329 c:\users\this pc\desktop\project\minesweeperupdated\functions.h
+1743260219 c:\users\this pc\desktop\project\minesweeperupdated\functions.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
 	"graphics.h"
 
-1742817349 source:c:\users\this pc\desktop\project\minesweeperupdated\functions.cpp
+1743260889 source:c:\users\this pc\desktop\project\minesweeperupdated\functions.cpp
 	<fstream>
 	<stdlib.h>
 	<cstdlib>
@@ -32,9 +34,11 @@
 	"graphics.h"
 	"functions.h"
 
-1742817349 c:\users\this pc\desktop\project\minesweeperupdated\texture.h
+1743223912 c:\users\this pc\desktop\project\minesweeperupdated\texture.h
 
-1742817059 source:c:\users\this pc\desktop\project\minesweeperupdated\graphics.cpp
+1743259229 source:c:\users\this pc\desktop\project\minesweeperupdated\graphics.cpp
+	<iostream>
+	<fstream>
 	"graphics.h"
 	"defs.h"
 

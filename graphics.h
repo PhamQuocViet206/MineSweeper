@@ -4,132 +4,111 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
+#include <vector>
+#include "defs.h"
 
-void logErrorAndExit(const char* msg, const char* error);
-SDL_Window* initSDL(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* WINDOW_TITLE0);
-SDL_Renderer* createRenderer(SDL_Window* window);
-void TTFInit();
+struct Sprite {
+    SDL_Texture* texture;
+    std::vector<SDL_Rect> clips;
+    int currentFrame = 0;
 
-void prepareScene(SDL_Texture * background);
-void presentScene();
-SDL_Texture *loadTexture(const char *filename);
-void renderTexture(SDL_Texture *texture, int x, int y);
-TTF_Font* loadFont(const char* path, int size);
-SDL_Texture* renderText(const char* text, TTF_Font* font, SDL_Color textColor);
-void blitRect(SDL_Texture *texture, SDL_Rect *src, int x, int y);
-void quit();
+    void init(SDL_Texture* _texture, int frames, const int _clips [][4]);
+    void tick();
+    const SDL_Rect* getCurrentClip() const;
+};
+
+struct Graphics{
+
+    void logErrorAndExit(const char* msg, const char* error);
+    SDL_Window* createWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const char* WINDOW_TITLE);
+    SDL_Renderer* createRenderer(SDL_Window* window);
+    void TTFInit();
+    void MixerInit();
+
+    void prepareScene(SDL_Texture * background);
+    void presentScene();
+    SDL_Texture *loadTexture(const char *filename);
+    void renderTexture(SDL_Texture *texture, int x, int y);
+    void blitRect(SDL_Texture *texture, SDL_Rect *src, int x, int y);
+
+    TTF_Font* loadFont(const char* path, int size);
+    SDL_Texture* renderText(const char* text, TTF_Font* font, SDL_Color textColor);
+
+    Mix_Music *loadMusic(const char* path);
+    void play(Mix_Music *gMusic);
+    Mix_Chunk* loadSound(const char* path);
+    void play(Mix_Chunk* gChunk);
+
+    void quit();
+    char* charBestScore();
+
+    SDL_Window *window = createWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Minesweeper Replica");
+    SDL_Renderer *renderer =createRenderer(window);
+
+    SDL_Texture* background = loadTexture("assets\\background.png");
+    SDL_Texture* newGameButton = loadTexture("assets\\new_game_button.png");
+    SDL_Texture* quitButton = loadTexture("assets\\quit_button.png");
+    SDL_Texture* flag = loadTexture("assets\\flag.png");
+    SDL_Texture* tileGrass = loadTexture("assets\\tile_grass.png");
+    SDL_Texture* tileFlag = loadTexture("assets\\tile_flag.png");
+    SDL_Texture* tileBomb = loadTexture("assets\\tile_bomb.png");
+    SDL_Texture* tile0 = loadTexture("assets\\tile_0.png");
+    SDL_Texture* tile1 = loadTexture("assets\\tile_1.png");
+    SDL_Texture* tile2 = loadTexture("assets\\tile_2.png");
+    SDL_Texture* tile3 = loadTexture("assets\\tile_3.png");
+    SDL_Texture* tile4 = loadTexture("assets\\tile_4.png");
+    SDL_Texture* tile5 = loadTexture("assets\\tile_5.png");
+    SDL_Texture* tile6 = loadTexture("assets\\tile_6.png");
+    SDL_Texture* tile7 = loadTexture("assets\\tile_7.png");
+    SDL_Texture* tile8 = loadTexture("assets\\tile_8.png");
+    SDL_Texture* blurBackground = loadTexture("assets\\blur_background.png");
+    SDL_Texture* pauseButton = loadTexture("assets\\pause_button.png");
+    SDL_Texture* shovelActionButton = loadTexture("assets\\shovel_action_button.png");
+    SDL_Texture* flagActionButton = loadTexture("assets\\flag_action_button.png");
+    SDL_Texture* continueButton = loadTexture("assets\\continue_button.png");
+
+    SDL_Texture* explodeSprite = loadTexture("assets\\explode_sprite.png");
+    const int explodeFrame = 15;
+    const int explodeClips[15][4] = {
+        {0,0,99,99},
+        {100,0,99,99},
+        {200,0,99,99},
+        {300,0,99,99},
+        {400,0,99,99},
+        {0,100,99,99},
+        {100,100,99,99},
+        {200,100,99,99},
+        {300,100,99,99},
+        {400,100,99,99},
+        {0,200,99,99},
+        {100,200,99,99},
+        {200,200,99,99},
+        {300,200,99,99},
+        {400,200,99,99},
+    };
+
+    TTF_Font* font = loadFont("assets\\light-arial.ttf", 50);
+    SDL_Color color = {0, 0, 0, 0};
+    SDL_Texture* bestScoreNumber = renderText(charBestScore(), font, color);
+    SDL_Texture* bestScoreText = renderText("Best score: ", font, color);
+    SDL_Texture* youWin = renderText("You WIN!", font, {0, 255, 0, 0});
+    SDL_Texture* youLost = renderText("You lost...", font, {255, 0, 0, 0});
+    SDL_Texture* toContinue = renderText("Click anywhere to continue.", font, color);
+    SDL_Texture* newHighScore = renderText("NEW HIGH SCORE!!!", font, {0, 255, 0, 0});
+
+    Mix_Chunk* buttonSound = loadSound("assets\\button_sound.wav");
+    Mix_Chunk* diggingSound = loadSound("assets\\digging_sound.wav");
+    Mix_Chunk* placingSound = loadSound("assets\\placing_sound.wav");
+    Mix_Chunk* explodeSound = loadSound("assets\\explode_sound.wav");
+    Mix_Chunk* winningSound = loadSound("assets\\winning_sound.wav");
+    Mix_Chunk* losingSound = loadSound("assets\\losing_sound.wav");
+
+    SDL_Rect textDest;
+    int dummy = SDL_QueryTexture(bestScoreText, NULL, NULL, &textDest.w, &textDest.h);
+
+    void destroyTexture();
+    void renderSprite(int x, int y, const Sprite& sprite);
+};
 
 #endif // _GRAPHICS__H_
-
-
-
-
-
-
-
-//struct Graphics{
-//    SDL_Renderer *renderer;
-//    SDL_Window *window;
-//
-//    void logErrorAndExit(const char* msg, const char* error){
-//        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "%s: %s", msg, error);
-//        SDL_Quit();
-//    }
-//
-//    void init(){
-//        if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
-//            logErrorAndExit("SDL_Init", SDL_GetError());
-//
-//        window = SDL_CreateWindow("Mine Sweppers Replica", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-////                                                                                                                       ... SDL_WINDOW_FULLSCREEN_DESKTOP); => toàn màn hình
-//        if (window == nullptr) logErrorAndExit("CreateWindow", SDL_GetError());
-//        if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG))
-//            logErrorAndExit( "SDL_image error:", IMG_GetError());
-//
-//        renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-////      renderer = SDL_CreateSoftwareRenderer(SDL_GetWindowSurface(window)); => chạy trong máy ảo
-//        if (renderer == nullptr) logErrorAndExit("CreateRenderer", SDL_GetError());
-//        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
-//        SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-//
-//        if (TTF_Init() == -1) {
-//            logErrorAndExit("SDL_ttf could not initialize! SDL_ttf Error: ",
-//            TTF_GetError());
-//        }
-//    }
-//
-//    void prepareScene(SDL_Texture * background){
-//        SDL_RenderClear(renderer);
-//        SDL_RenderCopy(renderer, background, NULL, NULL);
-//    }
-//
-//    void presentScene(){
-//        SDL_RenderPresent(renderer);
-//    }
-//
-//    SDL_Texture *loadTexture(const char *filename){
-//        SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
-//
-//        SDL_Texture *texture = IMG_LoadTexture(renderer, filename);
-//        if (texture == NULL)
-//            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "Load texture %s", IMG_GetError());
-//
-//        return texture;
-//    }
-//
-//    void renderTexture(SDL_Texture *texture, int x, int y){
-//        SDL_Rect dest;
-//
-//        dest.x = x;
-//        dest.y = y;
-//        SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
-//
-//        SDL_RenderCopy(renderer, texture, NULL, &dest);
-//    }
-//
-//    void blitRect(SDL_Texture *texture, SDL_Rect *src, int x, int y){
-//        SDL_Rect dest;
-//
-//        dest.x = x;
-//        dest.y = y;
-//        dest.w = src->w;
-//        dest.h = src->h;
-//
-//        SDL_RenderCopy(renderer, texture, src, &dest);
-//    }
-//
-//    void quit(){
-//        IMG_Quit();
-//
-//        SDL_DestroyRenderer(renderer);
-//        SDL_DestroyWindow(window);
-//        SDL_Quit();
-//        TTF_Quit();
-//    }
-//
-//    TTF_Font* loadFont(const char* path, int size){
-//        TTF_Font* gFont = TTF_OpenFont( path, size );
-//        if (gFont == nullptr) {
-//            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "Load font %s", TTF_GetError());
-//        }
-//    }
-//
-//    SDL_Texture* renderText(const char* text, TTF_Font* font, SDL_Color textColor){
-//        SDL_Surface* textSurface = TTF_RenderText_Solid( font, text, textColor );
-//        if( textSurface == nullptr ) {
-//            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "Render text surface %s", TTF_GetError());
-//            return nullptr;
-//        }
-//
-//        SDL_Texture* texture = SDL_CreateTextureFromSurface( renderer, textSurface );
-//        if( texture == nullptr ) {
-//            SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "Create texture from text %s", SDL_GetError());
-//        }
-//
-//        SDL_FreeSurface( textSurface );
-//        return texture;
-//    }
-//
-//};
-//
-//#endif // _GRAPHICS__H_

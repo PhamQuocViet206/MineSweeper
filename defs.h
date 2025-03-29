@@ -5,6 +5,6 @@ const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 600;
 //const char* WINDOW_TITLE = "Mine Sweppers Replica";
 
-const int numberOfBombs = 15;
+const int numberOfMaximumBombs = 15;
 
 #endif // _DEFS__H_
