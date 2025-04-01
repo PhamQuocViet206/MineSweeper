@@ -37,14 +37,14 @@ Game::Game(){
     bombField = vector<vector<int>> (14, vector<int> (22));
     playersField = vector<vector<char>> (14, vector<char> (22));
 
-    easyButton.initButton(graphics.loadTexture("assets/easy_button.png"), graphics.loadSound("assets\\button_sound.wav"), 176, 204);
-    normalButton.initButton(graphics.loadTexture("assets/normal_button.png"), graphics.loadSound("assets\\button_sound.wav"), 380, 204);
-    hardButton.initButton(graphics.loadTexture("assets/hard_button.png"), graphics.loadSound("assets\\button_sound.wav"), 660, 204);
-    quitButton.initButton(graphics.loadTexture("assets/quit_button.png"), graphics.loadSound("assets\\button_sound.wav"), 420, 360);
-    pauseButton.initButton(graphics.loadTexture("assets/pause_button.png"), graphics.loadSound("assets\\button_sound.wav"), 0, 0);
-    continueButton.initButton(graphics.loadTexture("assets/continue_button.png"), graphics.loadSound("assets\\button_sound.wav"), 360, 248);
-    shovelButton.initButton(graphics.loadTexture("assets/shovel_action_button.png"), graphics.loadSound("assets\\button_sound.wav"), 0, 620);
-    flagButton.initButton(graphics.loadTexture("assets/flag_action_button.png"), graphics.loadSound("assets\\button_sound.wav"), 0, 620);
+    easyButton.initButton(graphics.loadTexture("assets\\easy_button.png"), graphics.loadSound("assets\\button_sound.wav"), 176, 204);
+    normalButton.initButton(graphics.loadTexture("assets\\normal_button.png"), graphics.loadSound("assets\\button_sound.wav"), 380, 204);
+    hardButton.initButton(graphics.loadTexture("assets\\hard_button.png"), graphics.loadSound("assets\\button_sound.wav"), 660, 204);
+    quitButton.initButton(graphics.loadTexture("assets\\quit_button.png"), graphics.loadSound("assets\\button_sound.wav"), 420, 360);
+    pauseButton.initButton(graphics.loadTexture("assets\\pause_button.png"), graphics.loadSound("assets\\button_sound.wav"), 0, 0);
+    continueButton.initButton(graphics.loadTexture("assets\\continue_button.png"), graphics.loadSound("assets\\button_sound.wav"), 360, 248);
+    shovelButton.initButton(graphics.loadTexture("assets\\shovel_action_button.png"), graphics.loadSound("assets\\button_sound.wav"), 0, 620);
+    flagButton.initButton(graphics.loadTexture("assets\\flag_action_button.png"), graphics.loadSound("assets\\button_sound.wav"), 0, 620);
 
     background = graphics.loadTexture("assets\\background.jpg");
     blurBackground = graphics.loadTexture("assets\\blur_background.png");
@@ -374,8 +374,9 @@ void Game::run(){
             else won = false;
             score = (fieldSizeX*fieldSizeY - tileLeft)*10;
             endGameScene();
-            if(score>bestScore) newBestScore();
+            SDL_Delay(300);
             getClickPosition();
+            if(score>bestScore) newBestScore();
         }
     }
 
