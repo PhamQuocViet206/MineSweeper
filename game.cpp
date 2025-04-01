@@ -357,7 +357,6 @@ void Game::run(){
             generateNewGame();
             updatePlayersField();
             while(!gameOver){
-                cout << tileLeft << " " << bombCount << endl;
                 inGameScene();
                 do getClickPosition();
                 while(inGameOption()==0);
