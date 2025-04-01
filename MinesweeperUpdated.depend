@@ -1,44 +1,52 @@
 # depslib dependency file v1.0
-1743260346 source:c:\users\this pc\desktop\project\minesweeperupdated\main.cpp
-	"defs.h"
-	"graphics.h"
-	"functions.h"
+1743520204 source:c:\users\this pc\desktop\project\minesweeperupdated\main.cpp
+	"game.h"
 
-1743254662 c:\users\this pc\desktop\project\minesweeperupdated\defs.h
+1743520808 c:\users\this pc\desktop\project\minesweeperupdated\defs.h
 
-1743259092 c:\users\this pc\desktop\project\minesweeperupdated\graphics.h
+1743520796 c:\users\this pc\desktop\project\minesweeperupdated\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
 	<SDL_mixer.h>
 	<vector>
+	<iostream>
+	<fstream>
 	"defs.h"
 
-1743260219 c:\users\this pc\desktop\project\minesweeperupdated\functions.h
+1743435433 c:\users\this pc\desktop\project\minesweeperupdated\functions.h
+	<vector>
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
 	"graphics.h"
 
-1743260889 source:c:\users\this pc\desktop\project\minesweeperupdated\functions.cpp
-	<fstream>
-	<stdlib.h>
-	<cstdlib>
-	"functions.h"
-	"texture.h"
+1743510170 source:c:\users\this pc\desktop\project\minesweeperupdated\functions.cpp
 
-1742489269 c:\users\this pc\desktop\project\minesweeperupdated\button.h
+1743516878 c:\users\this pc\desktop\project\minesweeperupdated\button.h
 	<SDL.h>
 	<SDL_image.h>
-	<string>
 	"graphics.h"
-	"functions.h"
 
 1743223912 c:\users\this pc\desktop\project\minesweeperupdated\texture.h
 
-1743259229 source:c:\users\this pc\desktop\project\minesweeperupdated\graphics.cpp
-	<iostream>
-	<fstream>
+1743520796 source:c:\users\this pc\desktop\project\minesweeperupdated\graphics.cpp
 	"graphics.h"
-	"defs.h"
+
+1743516878 source:c:\users\this pc\desktop\project\minesweeperupdated\button.cpp
+	"button.h"
+
+1743520204 source:c:\users\this pc\desktop\project\minesweeperupdated\game.cpp
+	<iostream>
+	"game.h"
+
+1743520999 c:\users\this pc\desktop\project\minesweeperupdated\game.h
+	<vector>
+	<fstream>
+	<SDL.h>
+	<SDL_image.h>
+	<SDL_ttf.h>
+	<SDL_mixer.h>
+	"graphics.h"
+	"button.h"
 

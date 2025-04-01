@@ -1,7 +1,4 @@
-#include <iostream>
-#include <fstream>
 #include "graphics.h"
-#include "defs.h"
 
 void Graphics::logErrorAndExit(const char* msg, const char* error){
     SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "%s: %s", msg, error);
@@ -22,8 +19,7 @@ SDL_Window* Graphics::createWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const ch
 }
 
 SDL_Renderer* Graphics::createRenderer(SDL_Window* window){
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED |
-                                              SDL_RENDERER_PRESENTVSYNC);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == nullptr) logErrorAndExit("CreateRenderer", SDL_GetError());
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
@@ -52,7 +48,7 @@ void Graphics::presentScene(){
     }
 
 SDL_Texture* Graphics::loadTexture(const char *filename){
-   // SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
+    SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "Loading %s", filename);
 
     SDL_Texture *texture = IMG_LoadTexture(renderer, filename);
     if (texture == NULL)
@@ -141,81 +137,6 @@ void Graphics::quit(){
     SDL_DestroyWindow(window);
     SDL_Quit();
 }
-
-char* Graphics::charBestScore(){
-    std::ifstream fin;
-    fin.open("assets\\best_score.txt");
-    char bestScore[10];
-    fin >> bestScore;
-    fin.close();
-    char* score = bestScore;
-    return score;
-}
-
-void Graphics::destroyTexture(){
-        SDL_DestroyTexture( background );
-        background = NULL;
-        SDL_DestroyTexture( newGameButton );
-        newGameButton = NULL;
-        SDL_DestroyTexture( quitButton );
-        quitButton = NULL;
-        SDL_DestroyTexture( flag );
-        flag = NULL;
-        SDL_DestroyTexture( tileGrass );
-        tileGrass = NULL;
-        SDL_DestroyTexture( tileFlag );
-        tileFlag = NULL;
-        SDL_DestroyTexture( tile0 );
-        tile0 = NULL;
-        SDL_DestroyTexture( tile1 );
-        tile1 = NULL;
-        SDL_DestroyTexture( tile2 );
-        tile2 = NULL;
-        SDL_DestroyTexture( tile3 );
-        tile3 = NULL;
-        SDL_DestroyTexture( tile4 );
-        tile4 = NULL;
-        SDL_DestroyTexture( tile5 );
-        tile5 = NULL;
-        SDL_DestroyTexture( tile6 );
-        tile6 = NULL;
-        SDL_DestroyTexture( tile7 );
-        tile7 = NULL;
-        SDL_DestroyTexture( tile8 );
-        tile8 = NULL;
-        TTF_CloseFont( font );
-        font = NULL;
-        SDL_DestroyTexture( bestScoreNumber );
-        bestScoreNumber = NULL;
-        SDL_DestroyTexture( bestScoreText );
-        bestScoreText = NULL;
-        SDL_DestroyTexture( blurBackground );
-        blurBackground = NULL;
-        SDL_DestroyTexture( shovelActionButton );
-        shovelActionButton = NULL;
-        SDL_DestroyTexture( flagActionButton );
-        flagActionButton = NULL;
-        SDL_DestroyTexture( continueButton );
-        continueButton = NULL;
-        SDL_DestroyTexture( newHighScore );
-        newHighScore = NULL;
-        SDL_DestroyTexture( explodeSprite );
-        explodeSprite = NULL;
-        SDL_DestroyTexture( tileBomb );
-        tileBomb = NULL;
-        Mix_FreeChunk( buttonSound );
-        buttonSound = NULL;
-        Mix_FreeChunk( diggingSound );
-        diggingSound = NULL;
-        Mix_FreeChunk( placingSound );
-        placingSound = NULL;
-        Mix_FreeChunk( explodeSound );
-        explodeSound = NULL;
-        Mix_FreeChunk( winningSound );
-        winningSound = NULL;
-        Mix_FreeChunk( losingSound );
-        losingSound = NULL;
-    }
 
 void Sprite::init(SDL_Texture* _texture, int frames, const int _clips [][4]){
     texture = _texture;
