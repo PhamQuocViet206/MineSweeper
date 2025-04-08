@@ -9,7 +9,7 @@ SDL_Window* Graphics::createWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const ch
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         logErrorAndExit("SDL_Init", SDL_GetError());
 
-    SDL_Window* window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
     if (window == nullptr) logErrorAndExit("CreateWindow", SDL_GetError());
 
     if (!IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG))
@@ -19,7 +19,7 @@ SDL_Window* Graphics::createWindow(int SCREEN_WIDTH, int SCREEN_HEIGHT, const ch
 }
 
 SDL_Renderer* Graphics::createRenderer(SDL_Window* window){
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (renderer == nullptr) logErrorAndExit("CreateRenderer", SDL_GetError());
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
@@ -65,6 +65,17 @@ void Graphics::renderTexture(SDL_Texture *texture, int x, int y){
     SDL_QueryTexture(texture, NULL, NULL, &dest.w, &dest.h);
 
     SDL_RenderCopy(renderer, texture, NULL, &dest);
+}
+
+void Graphics::blitRect(SDL_Texture *texture, SDL_Rect *src, int x, int y){
+    SDL_Rect dest;
+
+    dest.x = x;
+    dest.y = y;
+    dest.w = src->w;
+    dest.h = src->h;
+
+    SDL_RenderCopy(renderer, texture, src, &dest);
 }
 
 TTF_Font* Graphics::loadFont(const char* path, int size){
@@ -117,18 +128,6 @@ void Graphics::play(Mix_Chunk* gChunk) {
     if (gChunk != nullptr) Mix_PlayChannel( -1, gChunk, 0 );
 }
 
-void Graphics::blitRect(SDL_Texture *texture, SDL_Rect *src, int x, int y){
-    SDL_Rect dest;
-
-    dest.x = x;
-    dest.y = y;
-    dest.w = src->w;
-    dest.h = src->h;
-
-    SDL_RenderCopy(renderer, texture, src, &dest);
-}
-
-
 void Graphics::quit(){
     IMG_Quit();
     TTF_Quit();
@@ -136,26 +135,6 @@ void Graphics::quit(){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
-}
-
-void Sprite::init(SDL_Texture* _texture, int frames, const int _clips [][4]){
-    texture = _texture;
-    SDL_Rect clip;
-    for (int i = 0; i < frames; i++){
-        clip.x = _clips[i][0];
-        clip.y = _clips[i][1];
-        clip.w = _clips[i][2];
-        clip.h = _clips[i][3];
-        clips.push_back(clip);
-    }
-}
-
-void Sprite::tick(){
-    currentFrame = (currentFrame + 1) % clips.size();
-}
-
-const SDL_Rect* Sprite::getCurrentClip() const{
-    return &(clips[currentFrame]);
 }
 
 void Graphics::renderSprite(int x, int y, const Sprite& sprite){

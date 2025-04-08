@@ -2,17 +2,16 @@
 #include "game.h"
 using namespace std;
 
-char* Game::charBestScore(){
+char* Game::charHighScore(){
     ifstream fin;
     fin.open("assets\\best_score.txt");
-    char CBestScore[10];
-    fin >> CBestScore;
+    char* score = new char[10];
+    fin >> score;
     fin.close();
-    char* score = CBestScore;
     return score;
 }
 
-int Game::lastBestScore(){
+int Game::lastHighScore(){
     ifstream fin;
     fin.open("assets\\best_score.txt");
     int bestScore;
@@ -21,7 +20,7 @@ int Game::lastBestScore(){
     return bestScore;
 }
 
-void Game::newBestScore(){
+void Game::newHighScore(){
     ofstream fout;
     fout.open("assets\\best_score.txt");
     fout << score;
@@ -31,7 +30,7 @@ void Game::newBestScore(){
 Game::Game(){
 
     score = 0;
-    bestScore = lastBestScore();
+    bestScore = lastHighScore();
     isShovel = true;
     gameOver = true;
     bombField = vector<vector<int>> (14, vector<int> (22));
@@ -64,13 +63,13 @@ Game::Game(){
     explode.init(graphics.loadTexture("assets\\explode_sprite.png"), explodeFrame, explodeClips);
 
     font = graphics.loadFont("assets\\light-arial.ttf", 50);
-    bestScoreNumber = graphics.renderText(charBestScore(), font, {0, 0, 0, 0});
-    bestScoreText = graphics.renderText("Best score: ", font, {0, 0, 0, 0});
+    highScoreNumber = graphics.renderText(charHighScore(), font, {0, 0, 0, 0});
+    highScoreText = graphics.renderText("High score: ", font, {0, 0, 0, 0});
     youWin = graphics.renderText("You WIN!", font, {0, 255, 0, 0});
     youLost = graphics.renderText("You lost...", font, {255, 0, 0, 0});
     toContinue = graphics.renderText("Click anywhere to continue.", font, {0, 0, 0, 0});
-    newHighScore = graphics.renderText("NEW HIGH SCORE!!!", font, {0, 255, 0, 0});
-    SDL_QueryTexture(bestScoreText, NULL, NULL, &textDest.w, &textDest.h);
+    newHighScoreText = graphics.renderText("NEW HIGH SCORE!!!", font, {0, 255, 0, 0});
+    SDL_QueryTexture(highScoreText, NULL, NULL, &textDest.w, &textDest.h);
 
     diggingSound = graphics.loadSound("assets\\digging_sound.wav");
     placingSound = graphics.loadSound("assets\\placing_sound.wav");
@@ -99,7 +98,7 @@ void Game::getClickPosition(){
         if(event.type==SDL_MOUSEBUTTONDOWN){
             x = x1;
             y = y1;
-            break;
+            return;
         }
     }
 }
@@ -111,8 +110,8 @@ void Game::menuScene(){
     normalButton.render(graphics);
     hardButton.render(graphics);
     quitButton.render(graphics);
-    graphics.renderTexture(bestScoreText, 10, 10);
-    graphics.renderTexture(bestScoreNumber, 10 + textDest.w, 10);
+    graphics.renderTexture(highScoreText, 10, 10);
+    graphics.renderTexture(highScoreNumber, 10 + textDest.w, 10);
     graphics.presentScene();
 }
 
@@ -170,15 +169,18 @@ void Game::generateNewGame(){
     tileLeft = fieldSizeX*fieldSizeY - bombCount;
 }
 
+void Game::resetHighScoreNumber(){
+    SDL_DestroyTexture(highScoreNumber);
+    highScoreNumber = graphics.renderText(charHighScore(), font, {0, 0, 0, 0});
+}
+
 void Game::clearBlankTile(int Tx, int Ty){
-    if(playersField[Tx][Ty]=='?'){
-        playersField[Tx][Ty]='0';
-        tileLeft--;
-    }
+    playersField[Tx][Ty]='0';
+    tileLeft--;
     for(int i=Tx-1;i<=Tx+1;i++)
         for(int j=Ty-1;j<=Ty+1;j++)
             if(bombField[i][j]!=0){
-                if(i!=0&&i!=fieldSizeX&&j!=0&&j!=fieldSizeY&&playersField[i][j]=='?') tileLeft--;
+                if(i!=0&&i!=fieldSizeX+1&&j!=0&&j!=fieldSizeY+1&&playersField[i][j]=='?') tileLeft--;
                 playersField[i][j] = bombField[i][j] + 48;
             }
     if(bombField[Tx-1][Ty]==0&&playersField[Tx-1][Ty]!='0'&&Tx>=2) clearBlankTile(Tx-1,Ty);
@@ -291,13 +293,12 @@ void Game::updatePlayersField(){
     else{
         if(playersField[choosenTileX][choosenTileY]=='?'||playersField[choosenTileX][choosenTileY]=='!'){
             graphics.play(diggingSound);
-            if(bombField[choosenTileX][choosenTileY]==0&&playersField[choosenTileX][choosenTileY]=='?'){
+            if(bombField[choosenTileX][choosenTileY]==0&&playersField[choosenTileX][choosenTileY]=='?')
                 clearBlankTile(choosenTileX,choosenTileY);
-                if(tileLeft==0) gameOver = true;
-                return;
+            else{
+                playersField[choosenTileX][choosenTileY]=bombField[choosenTileX][choosenTileY]+48;
+                tileLeft--;
             }
-            playersField[choosenTileX][choosenTileY]=bombField[choosenTileX][choosenTileY]+48;
-            tileLeft--;
             if(tileLeft==0){
                 gameOver = true;
                 return;
@@ -338,7 +339,7 @@ void Game::endGameScene(){
         graphics.play(losingSound);
         graphics.renderTexture(youLost, 10, 10);
     }
-    if(score>bestScore) graphics.renderTexture(newHighScore,10,20+textDest.h);
+    if(score>bestScore) graphics.renderTexture(newHighScoreText,10,20+textDest.h);
     graphics.renderTexture(toContinue,10,680-10-textDest.h);
     graphics.presentScene();
 }
@@ -369,18 +370,17 @@ void Game::run(){
                     do getClickPosition();
                     while(pauseOption()==0);
                 }
+                score = (fieldSizeX*fieldSizeY - bombCount - tileLeft)*10;
             }
             if(tileLeft==0) won = true;
             else won = false;
-            score = (fieldSizeX*fieldSizeY - tileLeft)*10;
             endGameScene();
             SDL_Delay(300);
             getClickPosition();
-            if(score>bestScore) newBestScore();
+            if(score>bestScore) newHighScore();
+            resetHighScoreNumber();
         }
     }
-
-
 }
 
 Game::~Game(){
@@ -428,18 +428,18 @@ Game::~Game(){
 
     TTF_CloseFont( font );
     font = NULL;
-    SDL_DestroyTexture( bestScoreNumber );
-    bestScoreNumber = NULL;
-    SDL_DestroyTexture( bestScoreText );
-    bestScoreText = NULL;
-    SDL_DestroyTexture(youWin);
+    SDL_DestroyTexture( highScoreNumber );
+    highScoreNumber = NULL;
+    SDL_DestroyTexture( highScoreText );
+    highScoreText = NULL;
+    SDL_DestroyTexture( youWin );
     youWin = NULL;
-    SDL_DestroyTexture(youLost);
+    SDL_DestroyTexture( youLost );
     youLost = NULL;
-    SDL_DestroyTexture(toContinue);
+    SDL_DestroyTexture( toContinue );
     toContinue = NULL;
-    SDL_DestroyTexture(newHighScore);
-    newHighScore = NULL;
+    SDL_DestroyTexture( newHighScoreText );
+    newHighScoreText = NULL;
 
     Mix_FreeChunk( buttonSound );
     buttonSound = NULL;

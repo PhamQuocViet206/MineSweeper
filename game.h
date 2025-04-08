@@ -70,12 +70,12 @@ struct Game{
         };
 
         TTF_Font* font;
-        SDL_Texture* bestScoreNumber;
-        SDL_Texture* bestScoreText;
+        SDL_Texture* highScoreNumber;
+        SDL_Texture* highScoreText;
         SDL_Texture* youWin;
         SDL_Texture* youLost;
         SDL_Texture* toContinue;
-        SDL_Texture* newHighScore;
+        SDL_Texture* newHighScoreText;
         SDL_Rect textDest;
 
         Mix_Chunk* buttonSound;
@@ -86,9 +86,9 @@ struct Game{
         Mix_Chunk* losingSound;
 
     public:
-        char* charBestScore();
-        int lastBestScore();
-        void newBestScore();
+        char* charHighScore();
+        int lastHighScore();
+        void newHighScore();
         Game();
         void waitUntilKeyPressed();
         void getClickPosition();
@@ -97,6 +97,7 @@ struct Game{
         int menuOption();
 
         void generateNewGame();
+        void resetHighScoreNumber();
         void clearBlankTile(int Tx, int Ty);
         void printPlayersField();
         void inGameScene();

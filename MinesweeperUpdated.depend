@@ -2,9 +2,9 @@
 1743520204 source:c:\users\this pc\desktop\project\minesweeperupdated\main.cpp
 	"game.h"
 
-1743520808 c:\users\this pc\desktop\project\minesweeperupdated\defs.h
+1744123274 c:\users\this pc\desktop\project\minesweeperupdated\defs.h
 
-1743520796 c:\users\this pc\desktop\project\minesweeperupdated\graphics.h
+1744116816 c:\users\this pc\desktop\project\minesweeperupdated\graphics.h
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
@@ -13,6 +13,7 @@
 	<iostream>
 	<fstream>
 	"defs.h"
+	"sprite.h"
 
 1743435433 c:\users\this pc\desktop\project\minesweeperupdated\functions.h
 	<vector>
@@ -30,17 +31,17 @@
 
 1743223912 c:\users\this pc\desktop\project\minesweeperupdated\texture.h
 
-1743520796 source:c:\users\this pc\desktop\project\minesweeperupdated\graphics.cpp
+1744116816 source:c:\users\this pc\desktop\project\minesweeperupdated\graphics.cpp
 	"graphics.h"
 
 1743516878 source:c:\users\this pc\desktop\project\minesweeperupdated\button.cpp
 	"button.h"
 
-1743520204 source:c:\users\this pc\desktop\project\minesweeperupdated\game.cpp
+1744123228 source:c:\users\this pc\desktop\project\minesweeperupdated\game.cpp
 	<iostream>
 	"game.h"
 
-1743520999 c:\users\this pc\desktop\project\minesweeperupdated\game.h
+1744122979 c:\users\this pc\desktop\project\minesweeperupdated\game.h
 	<vector>
 	<fstream>
 	<SDL.h>
@@ -49,4 +50,12 @@
 	<SDL_mixer.h>
 	"graphics.h"
 	"button.h"
+
+1744116508 c:\users\this pc\desktop\project\minesweeperupdated\sprite.h
+	<SDL.h>
+	<SDL_image.h>
+	<vector>
+
+1744116465 source:c:\users\this pc\desktop\project\minesweeperupdated\sprite.cpp
+	"sprite.h"
 

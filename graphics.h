@@ -9,15 +9,8 @@
 #include <iostream>
 #include <fstream>
 #include "defs.h"
+#include "sprite.h"
 
-struct Sprite {
-    SDL_Texture* texture;
-    std::vector<SDL_Rect> clips;
-    int currentFrame = 0;
-    void init(SDL_Texture* _texture, int frames, const int _clips [][4]);
-    void tick();
-    const SDL_Rect* getCurrentClip() const;
-};
 
 struct Graphics{
 
